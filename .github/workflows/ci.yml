@@ -1,0 +1,21 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - '**' # matches every branch
+
+jobs:
+  validate:
+    name: 'Terraform Validate'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Checkout Rain Shared GitHub Actions Repo
+        uses: actions/checkout@v2
+        with:
+          repository: rainhq/shared-actions
+          ref: main
+          path: .github/shared-actions
+          ssh-key: '${{ secrets.SHARED_ACTIONS_DEPLOY_KEY }}'
+      - uses: ./.github/shared-actions/tf-validate
+        name: 'Terraform Validate'
